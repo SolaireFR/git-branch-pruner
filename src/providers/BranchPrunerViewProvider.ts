@@ -3,8 +3,8 @@ import { GitService } from '../services/GitService';
 import { getErrorContent, getBranchListContent, getLoadingContent } from '../views/webview';
 
 /**
- * Git分支管理器的WebView提供者
- * 负责管理分支列表的显示、刷新和删除操作
+ * WebView provider for Git Branch Pruner
+ * Manages branch list display, refresh, and delete operations
  */
 export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
@@ -18,34 +18,34 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
   }
 
   /**
-   * 检查当前是否为中文环境
-   * 支持简体中文和繁体中文
+   * Check if current environment is Chinese
+   * Supports both Simplified and Traditional Chinese
    */
   private isChineseLanguage(): boolean {
     return this.currentLanguage.toLowerCase().startsWith('zh');
   }
 
   /**
-   * 获取本地化的消息文本
-   * 根据当前语言环境返回对应的中文或英文消息
+   * Get localized message text
+   * Returns Chinese or English messages based on current language environment
    */
   private getLocalizedMessages() {
     return this.isChineseLanguage()
       ? {
-          checking: '正在检查 Git 环境...',
-          refreshing: '正在刷新分支信息...',
-          deleting: (count: number) => `正在删除 ${count} 个分支...`,
-          gitNotInstalled: 'Git 未安装或无法在 PATH 中找到。请安装 Git 后重试。',
-          notGitRepo: '当前工作区不是 Git 仓库。请打开一个 Git 仓库后重试。',
-          failedToCheck: '检查 Git 环境失败。请重试。',
-          failedToRefresh: '刷新分支失败。请重试。',
-          failedToDelete: '删除分支失败。请重试。',
-          deleteConfirmSingle: '确定要删除以下分支吗？',
-          deleteConfirmMultiple: (total: number) => `确定要删除以下 ${total} 个分支吗？`,
-          deleteDetail: '此操作只会删除本地分支，不会影响远程分支。',
-          deleteButton: '删除分支',
-          cancelButton: '取消',
-          andMore: (count: number) => `...以及另外 ${count} 个`,
+          checking: 'Checking Git environment...',
+          refreshing: 'Refreshing branch information...',
+          deleting: (count: number) => `Deleting ${count} branch(es)...`,
+          gitNotInstalled: 'Git is not installed or cannot be found in PATH. Please install Git and try again.',
+          notGitRepo: 'Current workspace is not a Git repository. Please open a Git repository and try again.',
+          failedToCheck: 'Failed to check Git environment. Please try again.',
+          failedToRefresh: 'Failed to refresh branches. Please try again.',
+          failedToDelete: 'Failed to delete branches. Please try again.',
+          deleteConfirmSingle: 'Are you sure you want to delete the following branch?',
+          deleteConfirmMultiple: (total: number) => `Are you sure you want to delete the following ${total} branches?`,
+          deleteDetail: 'This operation will only delete local branches. Remote branches will not be affected.',
+          deleteButton: 'Delete Branches',
+          cancelButton: 'Cancel',
+          andMore: (count: number) => `...and ${count} more`,
         }
       : {
           checking: 'Checking Git environment...',
@@ -66,8 +66,8 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
   }
 
   /**
-   * 设置WebView界面控件的启用状态
-   * @param enabled 是否启用控件
+   * Set enabled state of WebView UI controls
+   * @param enabled Whether to enable controls
    */
   private async setControlsState(enabled: boolean) {
     if (this._view) {
@@ -79,9 +79,9 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
   }
 
   /**
-   * 执行操作时禁用界面控件的包装器方法
-   * 确保在操作执行期间禁用界面，防止重复操作
-   * @param operation 要执行的异步操作
+   * Wrapper method to disable UI controls during operation execution
+   * Ensures UI is disabled during operation to prevent duplicate operations
+   * @param operation Async operation to execute
    */
   private async withControlsDisabled<T>(operation: () => Promise<T>): Promise<T> {
     if (this.isOperationInProgress) {
@@ -100,8 +100,8 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
   }
 
   /**
-   * 初始化WebView视图
-   * 设置WebView配置并注册消息处理程序
+   * Initialize WebView view
+   * Set WebView configuration and register message handlers
    */
   public async resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -114,7 +114,7 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
       localResourceRoots: [this._extensionUri],
     };
 
-    // 注册WebView消息处理
+    // Register WebView message handler
     webviewView.webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
         case 'refresh':
@@ -126,14 +126,14 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
       }
     });
 
-    // 初始化时检查Git环境
+    // Check Git environment on initialization
     this._view.webview.html = getLoadingContent('Checking Git environment...', this.isChineseLanguage());
     await this.checkEnvironment();
   }
 
   /**
-   * 检查Git环境
-   * 验证Git安装状态和仓库有效性
+   * Check Git environment
+   * Validate Git installation status and repository validity
    */
   private async checkEnvironment() {
     if (!this._view) {
@@ -157,7 +157,7 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
         return;
       }
 
-      // 环境检查通过后，直接执行刷新操作而不是显示就绪状态
+      // After environment check passes, directly execute refresh instead of showing ready status
       await this.refreshBranches();
     } catch (error) {
       this._view.webview.html = getErrorContent(messages.failedToCheck, isChineseLanguage);
@@ -165,8 +165,8 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
   }
 
   /**
-   * 确认并删除选中的分支
-   * @param branchNames 要删除的分支名称列表
+   * Confirm and delete selected branches
+   * @param branchNames List of branch names to delete
    */
   private async confirmAndDeleteBranches(branchNames: string[]) {
     if (!this._view || !branchNames.length) {
@@ -184,7 +184,7 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
         modal: true,
         detail: messages.deleteDetail,
       },
-      messages.deleteButton // 只保留删除按钮作为确认选项
+      messages.deleteButton // Only keep delete button as confirmation option
     );
 
     if (result === messages.deleteButton) {
@@ -196,12 +196,12 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
         this._view.webview.html = getErrorContent(messages.failedToDelete, isChineseLanguage);
       }
     }
-    // 移除了 else 分支中的刷新操作
+    // Removed refresh operation from else branch
   }
 
   /**
-   * 构建删除确认消息
-   * @param branchNames 要删除的分支名称列表
+   * Build delete confirmation message
+   * @param branchNames List of branch names to delete
    */
   private buildConfirmationMessage(branchNames: string[]): string {
     const messages = this.getLocalizedMessages();
@@ -226,8 +226,8 @@ export class BranchPrunerViewProvider implements vscode.WebviewViewProvider {
   }
 
   /**
-   * 刷新分支列表
-   * 获取最新的分支信息并更新显示
+   * Refresh branch list
+   * Get latest branch information and update display
    */
   private async refreshBranches() {
     if (!this._view) {

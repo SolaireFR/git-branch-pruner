@@ -1,20 +1,20 @@
 /**
- * Git分支信息接口
+ * Git branch information interface
  */
 export interface Branch {
-  /** 分支名称 */
+  /** Branch name */
   name: string;
-  /** 是否为本地分支 */
+  /** Whether it is a local branch */
   isLocal: boolean;
-  /** 分支存在状态 */
+  /** Branch existence status */
   exists: {
-    /** 是否存在于本地 */
+    /** Whether it exists locally */
     local: boolean;
-    /** 是否存在于远程 */
+    /** Whether it exists remotely */
     remote: boolean;
   };
-  /** 是否为当前检出的分支 */
+  /** Whether it is the currently checked out branch */
   isCurrentBranch: boolean;
-  /** 是否为主分支（main/master） */
+  /** Whether it is the main branch (main/master) */
   isMainBranch: boolean;
 }

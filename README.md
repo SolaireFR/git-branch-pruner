@@ -1,50 +1,50 @@
 # Git Branch Pruner
 
-一个帮助你管理和清理 Git 分支的 VS Code 扩展。
+A VS Code extension to help you manage and clean up Git branches.
 
-[English](README_EN.md) | 简体中文
+English | [Chinese](README_EN.md)
 
-## 功能特性
+## Features
 
-- 📊 可视化展示所有本地分支状态
-- 🔄 显示分支与远程仓库的同步状态
-- 🗑️ 轻松删除已合并或已在远程删除的分支
-- 🔍 清晰标识当前分支和主分支
-- 🌏 支持中文和英文界面
+- 📊 Visually display all local branch statuses
+- 🔄 Show branch synchronization status with remote repository
+- 🗑️ Easily delete merged or remotely deleted branches
+- 🔍 Clearly identify current and main branches
+- 🌏 Support for English interface
 
-## 使用方法
+## How to Use
 
-1. 在 VS Code 中打开一个 Git 仓库
-2. 点击活动栏中的 Git Branch Pruner 图标
-3. 查看分支列表和状态
-4. 选择要删除的分支，点击"删除选中"按钮
+1. Open a Git repository in VS Code
+2. Click the Git Branch Pruner icon in the activity bar
+3. View branch list and status
+4. Select branches to delete and click "Delete Selected" button
 
-## 分支状态说明
+## Branch Status Indicators
 
-- ✓ 远程：分支在远程仓库中存在
-- ✗ 远程：分支在远程仓库中不存在
-- 当前：当前检出的分支
-- 主分支：main 或 master 分支
+- ✓ Remote: Branch exists in remote repository
+- ✗ Remote: Branch does not exist in remote repository
+- Current: Currently checked out branch
+- Main: main or master branch
 
-## 系统要求
+## Requirements
 
-- VS Code 1.80.0 或更高版本
-- Git 2.0.0 或更高版本
+- VS Code 1.80.0 or higher
+- Git 2.0.0 or higher
 
-## 注意事项
+## Important Notes
 
-- 删除操作仅影响本地分支，不会删除远程分支
-- 建议在删除分支前先确保相关更改已合并
-- 主分支（main/master）默认不允许删除
+- Delete operations only affect local branches, not remote branches
+- Ensure changes are merged before deleting branches
+- Main branches (main/master) are protected from deletion by default
 
-## 问题反馈
+## Feedback
 
-如果您遇到问题或有建议，欢迎在 [GitHub Issues](https://github.com/monkeykjy/git-branch-pruner/issues) 中提出。
+If you encounter any issues or have suggestions, please raise them in [GitHub Issues](https://github.com/monkeykjy/git-branch-pruner/issues).
 
-## 更新日志
+## Changelog
 
-详见 [CHANGELOG.md](CHANGELOG.md)
+See [CHANGELOG.md](CHANGELOG.md)
 
-## 许可证
+## License
 
 [MIT](LICENSE)

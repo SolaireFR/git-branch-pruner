@@ -13,12 +13,12 @@ function getLocalizedMessages(isChineseLanguage: boolean): LocalizedMessages {
   return isChineseLanguage
     ? {
         description:
-          'Git Branch Pruner 帮助您管理本地 Git 分支，识别并删除不再需要的分支，特别是那些已经合并或从远程删除的分支。',
-        refreshButton: '刷新分支',
-        deleteSelectedButton: '删除选中',
-        noBranches: '未找到分支',
-        selectAll: '全选',
-        unselectAll: '取消全选',
+          'Git Branch Pruner helps you manage local Git branches by identifying and removing branches that are no longer needed, especially those that have been merged or deleted from remote.',
+        refreshButton: 'Refresh Branches',
+        deleteSelectedButton: 'Delete Selected',
+        noBranches: 'No branches found',
+        selectAll: 'Select All',
+        unselectAll: 'Unselect All',
       }
     : {
         description:
@@ -95,7 +95,7 @@ export function getErrorContent(errorMessage: string, isChineseLanguage: boolean
     <html>
     <head>
         <style>
-            /* 保持原有样式 */
+            /* Keep original styles */
         </style>
     </head>
     <body>
@@ -116,17 +116,17 @@ export function getBranchListContent(branches: Branch[], isChineseLanguage: bool
     const badges = [];
 
     if (branch.exists.remote) {
-      badges.push(`<span class="status-badge in-sync">${isChineseLanguage ? '远程: ✓' : 'Remote: ✓'}</span>`);
+      badges.push(`<span class="status-badge in-sync">${isChineseLanguage ? 'Remote: ✓' : 'Remote: ✓'}</span>`);
     } else {
-      badges.push(`<span class="status-badge stale">${isChineseLanguage ? '远程: ✗' : 'Remote: ✗'}</span>`);
+      badges.push(`<span class="status-badge stale">${isChineseLanguage ? 'Remote: ✗' : 'Remote: ✗'}</span>`);
     }
 
     if (branch.isCurrentBranch) {
-      badges.push(`<span class="status-badge current">${isChineseLanguage ? '当前' : 'Current'}</span>`);
+      badges.push(`<span class="status-badge current">${isChineseLanguage ? 'Current' : 'Current'}</span>`);
     }
 
     if (branch.isMainBranch) {
-      badges.push(`<span class="status-badge main">${isChineseLanguage ? '主分支' : 'Main'}</span>`);
+      badges.push(`<span class="status-badge main">${isChineseLanguage ? 'Main' : 'Main'}</span>`);
     }
 
     return badges.join('');
@@ -282,11 +282,11 @@ export function getBranchListContent(branches: Branch[], isChineseLanguage: bool
         <script>
             const vscode = acquireVsCodeApi();
 
-            // 获取所有按钮元素
+            // Get all button elements
             const allButtons = () => document.querySelectorAll('button');
             const checkboxes = () => document.querySelectorAll('.branch-checkbox');
 
-            // 禁用所有交互元素
+            // Disable all interactive elements
             function setControlsEnabled(enabled) {
                 allButtons().forEach(button => button.disabled = !enabled);
                 checkboxes().forEach(checkbox => checkbox.disabled = !enabled || checkbox.closest('.branch-item').classList.contains('disabled'));
@@ -296,7 +296,7 @@ export function getBranchListContent(branches: Branch[], isChineseLanguage: bool
                 }
             }
 
-            // 监听来自扩展的消息
+            // Listen for messages from extension
             window.addEventListener('message', event => {
                 const message = event.data;
                 switch (message.type) {

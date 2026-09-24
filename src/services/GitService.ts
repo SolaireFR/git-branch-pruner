@@ -6,8 +6,8 @@ import { Branch } from '../types';
 const execAsync = promisify(exec);
 
 /**
- * Git操作服务类
- * 处理所有与Git相关的命令行操作
+ * Git operations service class
+ * Handles all Git-related command line operations
  */
 export class GitService {
   private outputChannel: vscode.OutputChannel;
@@ -16,25 +16,25 @@ export class GitService {
   constructor() {
     this.outputChannel = vscode.window.createOutputChannel('Git Branch Pruner');
 
-    // 配置环境变量
+    // Configure environment variables
     this.env = {
       ...process.env,
       LANG: 'en_US.UTF-8',
       LC_ALL: 'en_US.UTF-8',
       GIT_TERMINAL_PROMPT: '0',
-      // Windows系统特殊配置
+      // Windows system specific configuration
       ...(process.platform === 'win32'
         ? {
             FORCE_COLOR: '1',
-            CHCP: '65001', // 设置命令提示符使用UTF-8编码
+            CHCP: '65001', // Set command prompt to use UTF-8 encoding
           }
         : {}),
     };
   }
 
   /**
-   * 获取所有分支信息
-   * 包括本地分支和远程分支的状态
+   * Get all branch information
+   * Includes local branches and remote branch status
    */
   public async getBranches(): Promise<Branch[]> {
     const workingDir = this.getWorkingDirectory();
@@ -54,8 +54,8 @@ export class GitService {
   }
 
   /**
-   * 删除指定的本地分支
-   * @param branchNames 要删除的分支名称列表
+   * Delete specified local branches
+   * @param branchNames List of branch names to delete
    */
   public async deleteBranches(branchNames: string[]): Promise<void> {
     const workingDir = this.getWorkingDirectory();
@@ -74,7 +74,7 @@ export class GitService {
   }
 
   public getWorkingDirectory(): string | undefined {
-    // 获取当前 VS Code 打开的项目文件夹
+    // Get the currently opened project folder in VS Code
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
     if (!workspaceFolder) {
       this.outputChannel.appendLine('No workspace folder found');
@@ -125,7 +125,7 @@ export class GitService {
       const result = await execAsync(command, options);
       return result;
     } catch (error) {
-      // 如果使用 bash.exe 失败，尝试使用 cmd.exe
+      // If using bash.exe fails, try using cmd.exe
       if (process.platform === 'win32') {
         try {
           const fallbackOptions: ExecOptions = {
@@ -189,7 +189,7 @@ export class GitService {
 
   private async getMainBranch(workingDir: string): Promise<string> {
     try {
-      // 按照常见的主干分支名称顺序检查
+      // Check in order of common main branch names
       const commonMainBranches = ['main', 'master'];
       for (const branchName of commonMainBranches) {
         try {
@@ -199,7 +199,7 @@ export class GitService {
           continue;
         }
       }
-      // 如果都没找到，返回空字符串
+      // If none found, return empty string
       return '';
     } catch (error) {
       this.outputChannel.appendLine(`Error getting main branch: ${error}`);
@@ -212,20 +212,20 @@ export class GitService {
       const currentBranch = await this.getCurrentBranch(workingDir);
       const mainBranch = await this.getMainBranch(workingDir);
 
-      // 获取本地分支
+      // Get local branches
       const { stdout: localOutput } = await this.execGit('git branch --no-color', workingDir);
 
-      // 获取远程分支
+      // Get remote branches
       const { stdout: remoteOutput } = await this.execGit('git branch -r --no-color', workingDir);
 
-      // 处理本地分支
+      // Process local branches
       const localBranches = localOutput
         .split('\n')
         .map((b) => b.trim())
         .filter((b) => b)
         .map((b) => b.replace('* ', ''));
 
-      // 处理远程分支
+      // Process remote branches
       const remoteBranches = remoteOutput
         .split('\n')
         .map((b) => b.trim())

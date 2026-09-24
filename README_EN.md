@@ -2,7 +2,7 @@
 
 A VS Code extension to help you manage and clean up Git branches.
 
-English | [简体中文](README.md)
+English
 
 ## Features
 
